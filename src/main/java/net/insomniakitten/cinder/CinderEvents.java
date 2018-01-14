@@ -6,7 +6,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -37,8 +36,7 @@ public final class CinderEvents {
                 if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
                     TileEntity tile = player.world.getTileEntity(result.getBlockPos());
                     if (tile instanceof TileDecayableLight) {
-                        NBTTagCompound nbt = tile.getUpdateTag();
-                        int light = nbt.getInteger("light");
+                        int light = ((TileDecayableLight) tile).amount();
                         event.getRight().add("light: " + light);
                     }
                 }
@@ -62,27 +60,34 @@ public final class CinderEvents {
                 } else if (tile instanceof TileDecayableLight) {
                     ((TileDecayableLight) tile).ignite();
                 }
+                event.getWorld().notifyBlockUpdate(event.getPos(), state, state, 3);
             }
         }
     }
 
     public static void onTileUpdate(TileDecayableLight light, IBlockState state, World world, BlockPos pos) {
         IDecayableLight idl = (IDecayableLight) state.getBlock();
-
-        if (!world.isRainingAt(pos.up()) && light.amount() > 1) {
-            light.decay();
-            idl.onLightDecay(state, world, pos);
-        } else if (light.amount() > 0) {
+        if (world.getTotalWorldTime() % (CinderConfig.burnTime / 15) == 0) {
+            if (light.amount() > 1) {
+                light.decay();
+                idl.onLightDecay(state, world, pos);
+                world.notifyBlockUpdate(pos, state, state, 3);
+            } else if (light.amount() == 1) {
+                light.extinguish();
+                idl.onExtinguished(state, world, pos);
+                world.notifyBlockUpdate(pos, state, state, 3);
+            }
+            if (light.amount() > 0 && world.rand.nextInt(10) == 0) {
+                EnumFacing side = EnumFacing.VALUES[world.rand.nextInt(5) + 1];
+                if (world.isAirBlock(pos.offset(side))) {
+                    IBlockState fire = Blocks.FIRE.getDefaultState();
+                    world.setBlockState(pos.offset(side), fire, 11);
+                }
+            }
+        } else if (light.amount() > 1 && world.isRainingAt(pos.up()) && world.rand.nextInt(40) == 0) {
             light.extinguish();
             idl.onExtinguished(state, world, pos);
-        }
-
-        if (light.amount() > 0 && world.rand.nextInt(3) == 0) {
-            EnumFacing side = EnumFacing.VALUES[world.rand.nextInt(5) + 1];
-            if (world.isAirBlock(pos.offset(side))) {
-                IBlockState fire = Blocks.FIRE.getDefaultState();
-                world.setBlockState(pos.offset(side), fire, 11);
-            }
+            world.notifyBlockUpdate(pos, state, state, 3);
         }
     }
 

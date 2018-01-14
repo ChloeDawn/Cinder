@@ -10,4 +10,8 @@ public final class CinderConfig { // TODO
                      "When used, Cinder will attempt to \"damage\" the item, so be careful."})
     public static String[] igniterNames = { "minecraft:flint_and_steel" };
 
+    @Config.Name("burn_time")
+    @Config.Comment("The burn time of a light source, in ticks. The light source will decay over this time until it is extinguished.")
+    public static int burnTime = 36000;
+
 }

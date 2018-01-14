@@ -35,7 +35,7 @@ public final class TileDecayableLight extends TileEntity implements ITickable {
     }
 
     public final TileDecayableLight decay() {
-        this.light = Math.min(0, light - 1);
+        this.light = Math.max(0, light - 1);
         markDirty();
         return this;
     }
@@ -79,11 +79,9 @@ public final class TileDecayableLight extends TileEntity implements ITickable {
     @Override
     public final void update() {
         if (world == null || pos == null) return;
-        if (world.rand.nextInt(80) == 0) {
-            if (getBlockType() instanceof IDecayableLight) {
-                IBlockState state = world.getBlockState(pos);
-                CinderEvents.onTileUpdate(this, state, world, pos);
-            }
+        if (getBlockType() instanceof IDecayableLight) {
+            IBlockState state = world.getBlockState(pos);
+            CinderEvents.onTileUpdate(this, state, world, pos);
         }
     }
 
