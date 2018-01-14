@@ -60,6 +60,7 @@ public final class CinderEvents {
                     ((TileDecayableLight) tile).ignite();
                 }
                 event.getWorld().notifyBlockUpdate(event.getPos(), state, state, 3);
+                event.getWorld().checkLight(event.getPos());
                 event.setUseItem(Event.Result.DENY);
             }
         }
@@ -72,10 +73,12 @@ public final class CinderEvents {
                 light.decay();
                 idl.onLightDecay(state, world, pos);
                 world.notifyBlockUpdate(pos, state, state, 3);
+                world.checkLight(pos);
             } else if (light.amount() == 1) {
                 light.extinguish();
                 idl.onExtinguished(state, world, pos);
                 world.notifyBlockUpdate(pos, state, state, 3);
+                world.checkLight(pos);
             }
             if (light.amount() > 0 && world.rand.nextInt(10) == 0) {
                 /*
@@ -90,6 +93,7 @@ public final class CinderEvents {
             light.extinguish();
             idl.onExtinguished(state, world, pos);
             world.notifyBlockUpdate(pos, state, state, 3);
+            world.checkLight(pos);
         }
     }
 
