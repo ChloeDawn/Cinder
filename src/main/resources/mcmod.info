@@ -1,0 +1,10 @@
+[
+    {
+        "modid": "cinder",
+        "name": "Cinder",
+        "description": "",
+        "version": "${version}",
+        "mcversion": "[1.12,1.13)",
+        "authorList": [ "InsomniaKitten" ]
+    }
+]
