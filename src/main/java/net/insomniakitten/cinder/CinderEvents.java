@@ -5,9 +5,7 @@ import net.insomniakitten.cinder.api.TileDecayableLight;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -80,11 +78,13 @@ public final class CinderEvents {
                 world.notifyBlockUpdate(pos, state, state, 3);
             }
             if (light.amount() > 0 && world.rand.nextInt(10) == 0) {
+                /*
                 EnumFacing side = EnumFacing.VALUES[world.rand.nextInt(5) + 1];
                 if (world.isAirBlock(pos.offset(side))) {
                     IBlockState fire = Blocks.FIRE.getDefaultState();
                     world.setBlockState(pos.offset(side), fire, 11);
                 }
+                */
             }
         } else if (light.amount() > 1 && world.isRainingAt(pos.up()) && world.rand.nextInt(80) == 0) {
             light.extinguish();
