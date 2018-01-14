@@ -15,6 +15,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -61,6 +62,7 @@ public final class CinderEvents {
                     ((TileDecayableLight) tile).ignite();
                 }
                 event.getWorld().notifyBlockUpdate(event.getPos(), state, state, 3);
+                event.setUseItem(Event.Result.DENY);
             }
         }
     }
