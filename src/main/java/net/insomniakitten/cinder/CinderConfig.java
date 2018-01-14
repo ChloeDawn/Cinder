@@ -12,6 +12,6 @@ public final class CinderConfig { // TODO
 
     @Config.Name("burn_time")
     @Config.Comment("The burn time of a light source, in ticks. The light source will decay over this time until it is extinguished.")
-    public static int burnTime = 36000;
+    public static int burnTime = 360;
 
 }
