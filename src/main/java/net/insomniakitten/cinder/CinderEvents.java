@@ -84,7 +84,7 @@ public final class CinderEvents {
                     world.setBlockState(pos.offset(side), fire, 11);
                 }
             }
-        } else if (light.amount() > 1 && world.isRainingAt(pos.up()) && world.rand.nextInt(40) == 0) {
+        } else if (light.amount() > 1 && world.isRainingAt(pos.up()) && world.rand.nextInt(80) == 0) {
             light.extinguish();
             idl.onExtinguished(state, world, pos);
             world.notifyBlockUpdate(pos, state, state, 3);
